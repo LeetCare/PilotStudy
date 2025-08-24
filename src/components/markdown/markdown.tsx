@@ -9,7 +9,7 @@
  */
 
 import React, { FC, memo, ReactNode, HTMLAttributes } from "react";
-import ReactMarkdown, { Options } from "react-markdown";
+import ReactMarkdown from "react-markdown";
 import remarkGfm from "remark-gfm";
 
 /**
@@ -35,7 +35,7 @@ import remarkGfm from "remark-gfm";
  * - This component is taken from the Vercel AI SDK example chat application.
  * - the MDX plugin seems to break the markdown rendering when using `<` or `>` in the case, so we'll remove it for now.
  */
-export const MemoizedReactMarkdown: FC<Options> = memo(
+export const MemoizedReactMarkdown: any  = memo(
   (props) => (
     <ReactMarkdown
       {...props}
@@ -47,7 +47,7 @@ export const MemoizedReactMarkdown: FC<Options> = memo(
   ),
   (prevProps, nextProps) =>
     prevProps.children === nextProps.children &&
-    prevProps.className === nextProps.className,
+    // prevProps.className === nextProps.className,
 );
 
 MemoizedReactMarkdown.displayName = "MemoizedReactMarkdown";
