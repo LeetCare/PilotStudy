@@ -12,8 +12,7 @@ import "./globals.css";
 import React from "react";
 import { Analytics } from "@vercel/analytics/react";
 import { SpeedInsights } from "@vercel/speed-insights/next";
-import Providers from "@/app/Providers";
-import { Toaster } from "@/components/ui/toaster";
+import { Toaster } from "@/components/ui/sonner";
 
 export const metadata: Metadata = {
   title: "RxPert",
@@ -39,10 +38,8 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body className="font-pjs tracking-wide">
-        <Providers>
           {children}
           <Toaster />
-        </Providers>
         <Analytics />
         <SpeedInsights />
       </body>

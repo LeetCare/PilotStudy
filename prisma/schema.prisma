@@ -1,0 +1,208 @@
+// Learn more about the Prisma schema file in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "mongodb"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id            String       @id @default(auto()) @map("_id") @db.ObjectId
+  name          String?
+  email         String?      @unique
+  emailVerified DateTime?
+  passHash      String?
+  image         String?
+  role          Role
+  subscription  Subscription
+  accounts      Account[]
+  sessions      Session[]
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@map("users")
+}
+
+enum Role {
+  student
+  professor
+}
+
+enum Subscription {
+  free
+  basic
+  enterprise
+}
+
+model Account {
+  id                String  @id @default(auto()) @map("_id") @db.ObjectId
+  userId            String  @db.ObjectId
+  type              String
+  provider          String
+  providerAccountId String
+  refresh_token     String? @db.String
+  access_token      String? @db.String
+  expires_at        Int?
+  token_type        String?
+  scope             String?
+  id_token          String? @db.String
+  session_state     String?
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@unique([provider, providerAccountId])
+  @@map("accounts")
+}
+
+model Session {
+  id           String   @id @default(auto()) @map("_id") @db.ObjectId
+  sessionToken String   @unique
+  userId       String   @db.ObjectId
+  expires      DateTime
+  user         User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@index([userId])
+  @@map("sessions")
+}
+
+model VerificationToken {
+  id         String   @id @default(auto()) @map("_id") @db.ObjectId
+  identifier String
+  token      String
+  expires    DateTime
+
+  @@unique([identifier, token])
+  @@map("verification_tokens")
+}
+
+enum Department {
+  Nursing
+  Doctor
+  Pharmacy
+  Pre_health
+}
+
+model Profile {
+  id          String   @id @default(auto()) @map("_id") @db.ObjectId
+  firstName   String?
+  lastName    String?
+  topic       String?
+  school      String?
+  bio         String?
+  cases       Case[]
+  isProfessor Boolean?
+  image       Int
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+  //  department  Department
+
+  @@map("profiles")
+}
+
+enum SkillLevel {
+  PY1
+  PY2
+  PY3
+  PY4
+}
+
+model Case {
+  id          String     @id @default(auto()) @map("_id") @db.ObjectId
+  profileId   String     @db.ObjectId
+  profile     Profile    @relation(fields: [profileId], references: [id], onDelete: Cascade)
+  title       String
+  image       String? // path to the image
+  description String?
+  skillLevel  SkillLevel
+
+  name        String?
+  dateOfBirth DateTime?
+  sex         String
+
+  caseMarkdown String
+
+  // Questions
+  questions String?
+  answerKey String?
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@map("cases")
+}
+
+model CompletedScenario {
+  id         String @id @default(auto()) @map("_id") @db.ObjectId
+  userId     String @db.ObjectId
+  scenarioId String @db.ObjectId
+  moduleId   String @db.ObjectId
+
+  createdAt DateTime @default(now())
+
+  @@map("completed_scenarios")
+}
+
+// A model to store emails from the newsletter.
+model Email {
+  emailId String @id @default(auto()) @map("_id") @db.ObjectId
+  email   String @unique
+
+  @@map("emails")
+}
+
+enum VoiceType {
+  youngMale
+  youngFemale
+  oldMale
+  oldFemale
+}
+
+// A type to access the specific scenario after clicking into a patient
+model Module {
+  id          String     @id @default(auto()) @map("_id") @db.ObjectId
+  title       String
+  description String?
+  // scenarioRef ScenarioRef[]
+  scenarios   String[]
+  createdAt   DateTime   @default(now())
+  updatedAt   DateTime   @updatedAt
+  scenarioObj Scenario[]
+
+  @@map("modules")
+}
+
+type ScenarioRef {
+  scenarioId String @db.ObjectId
+  title      String
+  image      String
+}
+
+// A type to access the specific scenario after clicking into a patient
+model Scenario {
+  id               String     @id @default(auto()) @map("_id") @db.ObjectId
+  moduleId         String?    @db.ObjectId
+  module           Module?    @relation(fields: [moduleId], references: [id], onDelete: Cascade)
+  title            String
+  evaluationPrompt String
+  startingMessage  String
+  patientInfo      String
+  personaPrompt    String
+  description      String
+  voiceType        VoiceType?
+  tasks            String[]
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@map("scenarios")
+}
