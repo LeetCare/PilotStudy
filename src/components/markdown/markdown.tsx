@@ -1,48 +1,12 @@
-/**
- * @fileoverview Markdown Rendering Components
- *
- * This file contains components for rendering markdown content with custom
- * styling and specialized table handling for patient case data. Includes
- * memoized React Markdown component and custom renderers.
- *
- * @author LeetCare Development Team
- */
-
 import React, { FC, memo, ReactNode, HTMLAttributes } from "react";
 import ReactMarkdown, { Options as ReactMarkdownOptions } from "react-markdown";
 import remarkGfm from "remark-gfm";
 
-/**
- * Props interface for MemoizedReactMarkdown component
- */
 interface MemoizedReactMarkdownProps extends ReactMarkdownOptions {
   children: string;
   className?: string;
 }
 
-/**
- * Memoized React Markdown Component
- *
- * Optimized markdown renderer with GitHub Flavored Markdown support.
- * Prevents unnecessary re-renders when content remains unchanged.
- *
- * @example
- * ```tsx
- * <MemoizedReactMarkdown className="prose">
- *   {markdownContent}
- * </MemoizedReactMarkdown>
- * ```
- *
- * @see {@link https://github.com/remarkjs/react-markdown} For react-markdown documentation
- * @see {@link https://github.com/remarkjs/remark-gfm} For GitHub Flavored Markdown support
- * @see {@link https://www.npmjs.com/package/react-markdown} For react-markdown documentation
- * @see {@link https://www.npmjs.com/package/react-markdown#options} For react-markdown options
- * @see {@link https://github.com/vercel/ai-chatbot/blob/main/components/markdown.tsx} For the original implementation
- *
- * * @notes
- * - This component is taken from the Vercel AI SDK example chat application.
- * - the MDX plugin seems to break the markdown rendering when using `<` or `>` in the case, so we'll remove it for now.
- */
 export const MemoizedReactMarkdown: FC<MemoizedReactMarkdownProps> = memo(
   ({ className, children, ...props }: MemoizedReactMarkdownProps) => (
     <div className={className}>
@@ -69,13 +33,6 @@ export const MemoizedReactMarkdown: FC<MemoizedReactMarkdownProps> = memo(
 
 MemoizedReactMarkdown.displayName = "MemoizedReactMarkdown";
 
-/**
- * Custom Markdown Components for Patient Case Rendering
- *
- * Specialized renderers for markdown elements with custom styling and
- * table logic. Includes automatic column spanning for header rows when
- * adjacent cells are empty.
- */
 export const dataComponents = {
   em({ children }: { children?: ReactNode }) {
     return <em>{children}</em>;

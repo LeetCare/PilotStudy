@@ -1,43 +1,20 @@
-/**
- * @fileoverview Scenario Timer Component
- *
- * This file contains the ScenarioTimer component that provides interactive
- * timing functionality for medical training scenarios on the scenario page.
- * Able to start, pause, resume, and reset with formatted time display.
- *
- * @author LeetCare Development Team
- */
-
 "use client";
 
 import { Pause, Play, RotateCcw } from "lucide-react";
 import { useState, useEffect } from "react";
 import { Button } from "../ui/button";
 
-/**
- * Scenario Timer Component
- *
- * Interactive timer for tracking time spent in medical training scenarios.
- * Provides start, pause, resume, and reset functionality with MM:SS format
- * display and visual control buttons.
- *
- * @example
- * ```tsx
- * <ScenarioTimer />
- * ```
- */
 export default function ScenarioTimer({ begun }: { begun: boolean }) {
   const [isRunning, setIsRunning] = useState(false);
   const [isPaused, setIsPaused] = useState(false);
   const [seconds, setSeconds] = useState(0);
 
-  /*
-   * Formats total seconds into MM:SS display format.
-   */
   const formatTime = (totalSeconds: number) => {
     const minutes = Math.floor(totalSeconds / 60);
     const remainingSeconds = totalSeconds % 60;
-    return `${minutes.toString().padStart(2, "0")}:${remainingSeconds.toString().padStart(2, "0")}`;
+    return `${minutes.toString().padStart(2, "0")}:${remainingSeconds
+      .toString()
+      .padStart(2, "0")}`;
   };
 
   useEffect(() => {
@@ -60,31 +37,19 @@ export default function ScenarioTimer({ begun }: { begun: boolean }) {
     };
   }, [isRunning, isPaused]);
 
-  /*
-   * Starts the timer and clears paused state.
-   */
   const handleStartTimer = () => {
     setIsRunning(true);
     setIsPaused(false);
   };
 
-  /*
-   * Pauses the currently running timer.
-   */
   const handlePauseTimer = () => {
     setIsPaused(true);
   };
 
-  /*
-   * Resumes the paused timer.
-   */
   const handleResumeTimer = () => {
     setIsPaused(false);
   };
 
-  /*
-   * Resets timer to initial state with zero seconds.
-   */
   const refreshTimer = () => {
     setSeconds(0);
     setIsRunning(false);

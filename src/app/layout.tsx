@@ -1,12 +1,3 @@
-/**
- * @fileoverview Root Layout for RxPert Application
- *
- * This file contains the top-level Next.js layout component that wraps
- * the entire app. This layout provides global providers, analytics,
- * and base HTML structure and styling that applies to every page.
- *
- * @author LeetCare Development Team
- */
 import type { Metadata } from "next";
 import "./globals.css";
 import React from "react";

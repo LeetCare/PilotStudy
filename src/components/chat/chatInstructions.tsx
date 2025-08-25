@@ -1,12 +1,3 @@
-/**
- * @fileoverview Chat Instructions Component for Scenario Initialization
- *
- * This file contains the instructions display component for interactive learning
- * scenarios with markdown-rendered descriptions and scenario start controls.
- *
- * @author LeetCare Development Team
- */
-
 import remarkGfm from "remark-gfm";
 import { Button } from "../ui/button";
 import { PromptForm } from "./promptForm";
@@ -14,39 +5,13 @@ import { MemoizedReactMarkdown } from "../markdown/markdown";
 import { Card } from "../ui/card";
 
 interface ChatInstructionsProps {
-  /** The scenario instructions to guide the student through the patient interaction */
   description: string;
-
-  /** Handler to begin the scenario and transition to chat interface */
   setBegun?: (begun: boolean) => void;
-
-  /** Optional: Button text override */
   buttonText?: string;
-
-  /** Optional: Show button or not */
   showButton?: boolean;
-
-  /** Callback for evaluation button click */
   onEvaluate?: () => void;
 }
 
-/**
- * Chat Instructions Component
- *
- * scenario instruction component that displays formatted instructions before
- * users begin the chat session. This component renders markdown and provides
- * a start button with disabled prompt form preview.
- *
- * @example
- * ```tsx
- * <ChatInstructions
- *   description="## Scenario Overview\nYou are treating a patient with..."
- *   setBegun={handleScenarioStart}
- * />
- * ```
- *
- * @see {@link https://github.com/remarkjs/remark-gfm} For GitHub Flavored Markdown support
- */
 export default function ChatInstructions({
   description,
   setBegun,
@@ -83,7 +48,7 @@ export default function ChatInstructions({
           disabled={true}
           onSubmit={async () => {}}
           input=""
-          setInput={null as any}
+          setInput={() => {}}
           status="ready"
           placeholder="Write a message"
           onEvaluate={onEvaluate}

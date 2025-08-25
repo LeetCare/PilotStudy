@@ -1,47 +1,23 @@
-/**
- * @fileoverview AI SDK v5 Chat API Route
- *
- * This route handles streaming chat requests using the Vercel AI SDK v5
- * architecture with proper message formatting and streaming support.
- */
-
-import { openai } from "@ai-sdk/openai";
+import { NextRequest } from "next/server";
 import { streamText } from "ai";
+import { togetherai } from "@ai-sdk/togetherai";
 
-export async function POST(req: Request) {
-  try {
-    const { messages, data, personaPrompt } = await req.json();
+export const maxDuration = 30;
+export const dynamic = "force-dynamic";
 
-    // Validate messages format
-    if (!Array.isArray(messages)) {
-      return new Response("Invalid messages format", { status: 400 });
-    }
+export async function POST(req: NextRequest) {
+  const body = await req.json();
 
-    // Convert messages to standard format for the API
-    const formattedMessages = messages.map((msg) => ({
-      role: msg.role,
-      content: msg.content || "",
-    }));
+  const { personaPrompt } = body;
 
-    // Add system message for persona if provided (from either data or direct personaPrompt)
-    let systemMessages = [];
-    const prompt = personaPrompt || data?.personaPrompt;
-    if (prompt) {
-      systemMessages.push({
-        role: "system" as const,
-        content: prompt,
-      });
-    }
+  const messages = body.messages ?? [];
 
-    const result = streamText({
-      model: openai("gpt-3.5-turbo"),
-      messages: [...systemMessages, ...formattedMessages],
-      temperature: 0.7,
-    });
+  const result = await streamText({
+    model: togetherai("meta-llama/Llama-3.3-70B-Instruct-Turbo"),
+    temperature: 0.9,
+    system: personaPrompt,
+    messages,
+  });
 
-    return result.toTextStreamResponse();
-  } catch (error) {
-    console.error("Chat API Error:", error);
-    return new Response("Internal Server Error", { status: 500 });
-  }
+  return result.toTextStreamResponse();
 }

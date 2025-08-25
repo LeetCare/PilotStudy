@@ -1,16 +1,5 @@
-/**
- * @fileoverview Prompt Form Component for Chat Input
- *
- * This file contains the PromptForm component responsible for handling user input
- * in the chat interface. It supports both scenario and default modes with different
- * UI layouts.
- *
- * @author LeetCare Development Team
- */
-
 import * as React from "react";
 import Textarea from "react-textarea-autosize";
-import { UIMessage } from "@ai-sdk/react";
 import { useEnterSubmit } from "@/lib/hooks/use-enter-submit";
 import { Button } from "@/components/ui/button";
 import { ArrowUpIcon, BookOpen, Plus, X, Edit3 } from "lucide-react";
@@ -24,56 +13,27 @@ import {
 } from "@/components/ui/popover";
 import { Input } from "@/components/ui/input";
 import { useState } from "react";
+import { Message } from "@ai-sdk/react";
 
 export interface PromptProps {
-  /** Chat status */
-  status: "loading" | "idle" | string;
-  /** Messages array */
-  messages: UIMessage[];
-  /** Current input value */
+  status: "loading" | "streaming" | "idle" | string;
+  messages: Message[];
   input: string;
-  /** Function to set input value */
   setInput: (value: string) => void;
-  /** Whether the form should be disabled */
   disabled?: boolean;
-
-  /** The function to call when the form is submitted */
   onSubmit: (value: string) => void;
-
-  /** Placeholder text for the input field */
   placeholder?: string;
-
-  /** Callback for attachment button clicks */
   onAttachmentClick?: () => void;
-
-  /** Callback for microphone button clicks */
   onMicrophoneClick?: () => void;
-
-  /** Type identifier for form styling (scenario vs default vs scenario-edit) */
   type?: string;
-
-  /** Tasks data for rubric display */
   tasks?: string[];
-
-  /** Callback for when tasks are edited (only for scenario-edit mode) */
   onTasksEdit?: (newTasks: string[]) => void;
-
-  /** Callback for evaluation button click */
   onEvaluate?: () => void;
-
-  /** Whether evaluation mode is enabled */
   isEvaluate?: boolean;
-
-  /** Whether this is a scenario-based chat */
   isScenario?: boolean;
-
-  /** Whether the scenario has been completed */
   isScenarioCompleted?: boolean;
 }
 
-/**
- * Editable Tasks Component for scenario-edit mode
- */
 function EditableTasks({
   tasks = [],
   onTasksEdit,
@@ -205,42 +165,6 @@ function EditableTasks({
   );
 }
 
-/**
- * PromptForm Component
- *
- * Chat input form with auto-resizing textarea and contextual controls.
- * Supports both scenario and default modes.
- * Includes specialized features like rubric popover for training scenarios.
- *
- * @example
- * ```tsx
- * // Scenario form
- * <PromptForm
- *   onSubmit={sendMessage}
- *   input={message}
- *   setInput={setMessage}
- *   status="streaming"
- *   type="scenario"
- *   placeholder="Describe your symptoms..."
- *   disabled={false}
-
- *   tasks={rubricData}
- * />
- * ```
- *
- * @see {@link https://www.npmjs.com/package/react-textarea-autosize} For textarea component documentation
- * @see {@link https://ui.shadcn.com/docs/components/button} For button component documentation
- * @see {@link https://github.com/vercel/ai-chatbot/blob/main/components/prompt-form.tsx} Original implementation
- *
- * @notes
- * - This component is taken from the Vercel AI SDK example chat application.
- * - Uses `react-textarea-autosize` library which automatically adjusts the textarea height as the user types.
- * - The `useEnterSubmit` hook allows the form to be submitted by pressing Enter while preventing submission on Shift+Enter.
- * - Renders completely different layouts based on the `type` prop with scenario type including additional features.
- *
- * @todo
- * - Add a loading state to the button to indicate when the form is being submitted.
- */
 export function PromptForm({
   onSubmit,
   input,
@@ -255,12 +179,10 @@ export function PromptForm({
   messages,
   onEvaluate,
   isEvaluate,
-  isScenario,
   isScenarioCompleted,
 }: PromptProps) {
   const { formRef, onKeyDown } = useEnterSubmit();
 
-  // Automatically focus the textarea when the component is mounted
   const inputRef = React.useRef<HTMLTextAreaElement>(null);
   React.useEffect(() => {
     if (inputRef.current) {

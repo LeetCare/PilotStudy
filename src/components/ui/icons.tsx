@@ -4,12 +4,6 @@ import * as React from "react";
 
 import { cn } from "@/lib/utils";
 
-/** A list of icons that can be used in the application
- *
- * taken from vercel's AI chatbot example
- * @see https://chat.vercel.ai/
- * @see https://github.com/vercel/ai-chatbot/blob/main/components/ui/icons.tsx
- */
 function IconNextChat({
   className,
   inverted,

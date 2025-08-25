@@ -1,24 +1,5 @@
-/**
- * @fileoverview Individual Scenario Page for Interactive Learning Sessions
- *
- * This file contains the Next.js page component that displays individual
- * interactive learning scenarios. You can get to this page from the scenarios
- * module list by clicking on specific scenario cards.
- *
- * @author LeetCare Development Team
- */
 import ScenarioComponent from "@/components/scenario/scenario";
 
-/**
- * Individual Scenario Page Component
- *
- * Page component that renders scenarios. This component fetches scenario data
- * and associated case information before displaying the scenario interface.
- *
- * @see {@link https://nextjs.org/docs/app/api-reference/file-conventions/page#params-optional} For dynamic route parameters
- * @see {@link https://www.prisma.io/docs/concepts/components/prisma-client/crud} For Prisma CRUD operations
- * @see {@link https://nextjs.org/docs/app/api-reference/functions/not-found} For Next.js notFound handling
- */
 export default async function AgendaSettingScenarioPage() {
   const scenario = {
     id: "6892f7db7d87ed2fd79ce248",
