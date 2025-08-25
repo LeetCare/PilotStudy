@@ -64,7 +64,6 @@ export default function ScenarioComponent({ scenario }: ScenarioProps) {
             setInput={setInput}
             status={status}
             append={append}
-            reload={reload}
             enableClipboard={false}
           />
         ) : (

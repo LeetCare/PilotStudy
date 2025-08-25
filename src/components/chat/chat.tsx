@@ -13,7 +13,6 @@ export interface ChatProps
       UseChatHelpers,
       | "append"
       | "status"
-      | "reload"
       | "messages"
       | "stop"
       | "input"
@@ -23,7 +22,6 @@ export interface ChatProps
   scrollRef: RefObject<HTMLDivElement>;
   enableClipboard?: boolean;
   disabled?: boolean;
-  type?: string;
 }
 
 export default function Chat({
@@ -36,9 +34,6 @@ export default function Chat({
   disabled = false,
   status,
   append,
-  reload,
-  enableClipboard = true,
-  type,
 }: ChatProps) {
   const { isAtBottom, scrollToBottom } = useAtBottom(scrollRef);
 
@@ -51,11 +46,7 @@ export default function Chat({
       <div className="relative flex size-full max-w-4xl flex-col px-4">
         <div className="flex flex-1 flex-col justify-between space-y-4 px-4 md:space-y-8">
           <>
-            <ChatList
-              messages={messages}
-              status={status}
-              enableClipboard={enableClipboard}
-            />
+            <ChatList messages={messages} />
             <ChatScrollAnchor
               scrollRef={scrollRef}
               isAtBottom={isAtBottom}
@@ -69,14 +60,12 @@ export default function Chat({
           status={status}
           stop={stop}
           append={append}
-          reload={reload}
           messages={messages}
           input={input}
           setInput={setInput}
           isAtBottom={isAtBottom}
           scrollToBottom={scrollToBottom}
           placeholder={"Write a message..."}
-          type={type}
         />
       </div>
     </div>

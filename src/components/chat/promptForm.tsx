@@ -2,17 +2,10 @@ import * as React from "react";
 import Textarea from "react-textarea-autosize";
 import { useEnterSubmit } from "@/lib/hooks/use-enter-submit";
 import { Button } from "@/components/ui/button";
-import { ArrowUpIcon, BookOpen, Plus, X, Edit3 } from "lucide-react";
-import { IconArrowElbow } from "@/components/ui/icons";
+import { ArrowUpIcon } from "lucide-react";
 import { cn } from "@/lib/utils";
-import EvaluationButton from "@/components/chat/buttonEvaluation";
-import {
-  Popover,
-  PopoverContent,
-  PopoverTrigger,
-} from "@/components/ui/popover";
-import { Input } from "@/components/ui/input";
-import { useState } from "react";
+import CompleteButton from "@/components/chat/buttonEvaluation";
+
 import { Message } from "@ai-sdk/react";
 
 export interface PromptProps {
@@ -23,163 +16,16 @@ export interface PromptProps {
   disabled?: boolean;
   onSubmit: (value: string) => void;
   placeholder?: string;
-  onAttachmentClick?: () => void;
-  onMicrophoneClick?: () => void;
-  type?: string;
-  tasks?: string[];
-  onTasksEdit?: (newTasks: string[]) => void;
-  onEvaluate?: () => void;
-  isEvaluate?: boolean;
-  isScenario?: boolean;
-  isScenarioCompleted?: boolean;
-}
-
-function EditableTasks({
-  tasks = [],
-  onTasksEdit,
-}: {
-  tasks: string[];
-  onTasksEdit?: (newTasks: string[]) => void;
-}) {
-  const [editingIndex, setEditingIndex] = useState<number | null>(null);
-  const [editValue, setEditValue] = useState("");
-  const [isAddingNew, setIsAddingNew] = useState(false);
-  const [newTaskValue, setNewTaskValue] = useState("");
-
-  const handleEditTask = (index: number) => {
-    setEditingIndex(index);
-    setEditValue(tasks[index]);
-  };
-
-  const handleSaveEdit = () => {
-    if (editingIndex !== null && onTasksEdit) {
-      const newTasks = [...tasks];
-      newTasks[editingIndex] = editValue;
-      onTasksEdit(newTasks);
-    }
-    setEditingIndex(null);
-    setEditValue("");
-  };
-
-  const handleCancelEdit = () => {
-    setEditingIndex(null);
-    setEditValue("");
-  };
-
-  const handleDeleteTask = (index: number) => {
-    if (onTasksEdit) {
-      const newTasks = tasks.filter((_, i) => i !== index);
-      onTasksEdit(newTasks);
-    }
-  };
-
-  const handleAddNew = () => {
-    if (newTaskValue.trim() && onTasksEdit) {
-      onTasksEdit([...tasks, newTaskValue.trim()]);
-      setNewTaskValue("");
-      setIsAddingNew(false);
-    }
-  };
-
-  const handleCancelAdd = () => {
-    setNewTaskValue("");
-    setIsAddingNew(false);
-  };
-
-  return (
-    <div className="space-y-2">
-      {tasks.map((task, index) => (
-        <div key={index} className="group relative">
-          {editingIndex === index ? (
-            <div className="space-y-2">
-              <Input
-                value={editValue}
-                onChange={(e) => setEditValue(e.target.value)}
-                placeholder="Edit task..."
-                autoFocus
-              />
-              <div className="flex gap-1">
-                <Button size="sm" onClick={handleSaveEdit}>
-                  Save
-                </Button>
-                <Button size="sm" variant="outline" onClick={handleCancelEdit}>
-                  Cancel
-                </Button>
-              </div>
-            </div>
-          ) : (
-            <div className="group flex items-center justify-between rounded-md border border-neutral-300 bg-neutral-100 p-2 text-sm transition-colors hover:bg-neutral-200">
-              <span className="flex-1">{task}</span>
-              <div className="flex gap-1 opacity-0 transition-opacity group-hover:opacity-100">
-                <Button
-                  size="sm"
-                  variant="ghost"
-                  onClick={() => handleEditTask(index)}
-                  className="h-6 w-6 p-0"
-                >
-                  <Edit3 className="h-3 w-3" />
-                </Button>
-                <Button
-                  size="sm"
-                  variant="ghost"
-                  onClick={() => handleDeleteTask(index)}
-                  className="h-6 w-6 p-0 text-red-500 hover:text-red-700"
-                >
-                  <X className="h-3 w-3" />
-                </Button>
-              </div>
-            </div>
-          )}
-        </div>
-      ))}
-
-      {isAddingNew ? (
-        <div className="space-y-2">
-          <Input
-            value={newTaskValue}
-            onChange={(e) => setNewTaskValue(e.target.value)}
-            placeholder="Add new task..."
-            autoFocus
-          />
-          <div className="flex gap-1">
-            <Button size="sm" onClick={handleAddNew}>
-              Add
-            </Button>
-            <Button size="sm" variant="outline" onClick={handleCancelAdd}>
-              Cancel
-            </Button>
-          </div>
-        </div>
-      ) : (
-        <Button
-          size="sm"
-          variant="outline"
-          onClick={() => setIsAddingNew(true)}
-          className="w-full"
-        >
-          <Plus className="mr-1 h-4 w-4" />
-          Add Task
-        </Button>
-      )}
-    </div>
-  );
 }
 
 export function PromptForm({
+  messages,
   onSubmit,
   input,
   setInput,
   status,
   placeholder = "Write a message...",
   disabled = false,
-  type,
-
-  tasks,
-  onTasksEdit,
-  messages,
-  onEvaluate,
-  isEvaluate,
-  isScenarioCompleted,
 }: PromptProps) {
   const { formRef, onKeyDown } = useEnterSubmit();
 
@@ -194,159 +40,63 @@ export function PromptForm({
     }
   }, []);
 
-  const isScenarioType = type === "scenario" || type === "scenario-edit";
-  const isEditMode = type === "scenario-edit";
-
-  if (isScenarioType) {
-    return (
-      <form
-        onSubmit={async (e) => {
-          e.preventDefault();
-          if (!input?.trim()) {
-            return;
-          }
-          setInput("");
-          onSubmit(input);
-        }}
-        ref={formRef}
-        className={cn(
-          "relative flex w-full grow items-center overflow-hidden rounded-lg border border-neutral-200 bg-white p-2 shadow-xs",
-          disabled && "bg-neutral-100"
-        )}
-      >
-        <div className="flex size-full flex-col">
-          <Textarea
-            disabled={disabled}
-            ref={inputRef}
-            tabIndex={0}
-            onKeyDown={onKeyDown}
-            rows={1}
-            maxRows={
-              typeof window !== "undefined" && window.innerWidth < 768 ? 4 : 1
-            }
-            value={input}
-            onChange={(e) => {
-              setInput(e.target.value);
-            }}
-            placeholder={placeholder}
-            spellCheck={true}
-            className="my-2 w-full resize-none bg-transparent px-3 pb-2 focus-within:outline-hidden disabled:cursor-not-allowed sm:text-sm md:pb-12"
-          />
-          <div className="flex justify-between">
-            <div className="flex items-center space-x-1 px-1">
-              <Popover>
-                <PopoverTrigger asChild>
-                  <Button
-                    type="button"
-                    variant="outline"
-                    size="icon"
-                    className="transition-color flex items-center justify-center rounded-full p-1.5"
-                  >
-                    <BookOpen className="size-4" />
-                  </Button>
-                </PopoverTrigger>
-                <PopoverContent className="w-80 p-4" align="start">
-                  <div className="space-y-4">
-                    <div className="space-y-2">
-                      <h4 className="leading-none font-medium">
-                        {isEditMode ? "Edit Tasks & Points" : "Tasks & Points"}
-                      </h4>
-                      <p className="text-muted-foreground text-sm">
-                        {isEditMode
-                          ? "Edit, add, or remove tasks for this scenario."
-                          : "Complete these tasks to earn points in the scenario."}
-                      </p>
-                    </div>
-                    {isEditMode ? (
-                      <EditableTasks
-                        tasks={tasks || []}
-                        onTasksEdit={onTasksEdit}
-                      />
-                    ) : (
-                      tasks && (
-                        <div className="space-y-2">
-                          {tasks.map((task, index) => (
-                            <div
-                              key={index}
-                              className="flex items-center rounded-md border border-neutral-300 bg-neutral-100 p-2 text-sm"
-                            >
-                              {task}
-                            </div>
-                          ))}
-                        </div>
-                      )
-                    )}
-                  </div>
-                </PopoverContent>
-              </Popover>
-              <EvaluationButton
-                messages={messages} // Pass messages directly
-                onEvaluate={onEvaluate} // Pass onEvaluate as evaluate
-                isEvaluated={isEvaluate} // Pass isEvaluate as isEvaluated
-                isEvaluating={false} // Set default or pass if needed
-                disabled={disabled || isScenarioCompleted} // Disable if scenario is completed or form is disabled
-              />
-            </div>
-
-            <div className="flex items-center space-x-1 px-1">
-              <Button
-                variant="outline"
-                size="icon"
-                className="flex size-8 items-center justify-center rounded-full border p-1.5 transition-colors duration-300 disabled:pointer-events-none"
-                type="submit"
-                disabled={status === "loading" || input === "" || disabled}
-              >
-                <ArrowUpIcon className="size-4" />
-                <span className="sr-only">Send message</span>
-              </Button>
-            </div>
-          </div>
-        </div>
-      </form>
-    );
-  } else {
-    return (
-      <form
-        onSubmit={async (e) => {
-          e.preventDefault();
-          if (!input?.trim()) {
-            return;
-          }
-          setInput("");
-          onSubmit(input);
-        }}
-        ref={formRef}
-        className="relative flex w-full grow resize-none items-center overflow-hidden border-neutral-400 bg-white pr-2 sm:rounded-lg sm:border"
-      >
+  return (
+    <form
+      onSubmit={async (e) => {
+        e.preventDefault();
+        if (!input?.trim()) {
+          return;
+        }
+        setInput("");
+        onSubmit(input);
+      }}
+      ref={formRef}
+      className={cn(
+        "relative flex w-full grow items-center overflow-hidden rounded-lg border border-neutral-200 bg-white p-2 shadow-xs",
+        disabled && "bg-neutral-100"
+      )}
+    >
+      <div className="flex size-full flex-col">
         <Textarea
           disabled={disabled}
           ref={inputRef}
           tabIndex={0}
           onKeyDown={onKeyDown}
           rows={1}
-          maxRows={2}
+          maxRows={
+            typeof window !== "undefined" && window.innerWidth < 768 ? 4 : 1
+          }
           value={input}
           onChange={(e) => {
             setInput(e.target.value);
           }}
-          placeholder={
-            disabled
-              ? "Confirm your edits before requesting another change!"
-              : placeholder
-          }
+          placeholder={placeholder}
           spellCheck={true}
-          className="w-full resize-none bg-transparent px-4 py-4 focus-within:outline-hidden disabled:cursor-not-allowed sm:text-sm"
+          className="my-2 w-full resize-none bg-transparent px-3 pb-2 focus-within:outline-hidden disabled:cursor-not-allowed sm:text-sm md:pb-12"
         />
-        <Button
-          className="rounded-xl disabled:cursor-not-allowed"
-          type="submit"
-          size="sm"
-          disabled={status === "loading" || input === "" || disabled}
-        >
-          <IconArrowElbow />
-          <span className="sr-only">{placeholder}</span>
-        </Button>
-      </form>
-    );
-  }
+        <div className="flex justify-between">
+          <div className="flex items-center space-x-1 px-1">
+            <CompleteButton
+              messages={messages}
+              isComplete={false}
+              disabled={disabled}
+            />
+          </div>
+
+          <div className="flex items-center space-x-1 px-1">
+            <Button
+              variant="outline"
+              size="icon"
+              className="flex size-8 items-center justify-center rounded-full border p-1.5 transition-colors duration-300 disabled:pointer-events-none"
+              type="submit"
+              disabled={status === "loading" || input === "" || disabled}
+            >
+              <ArrowUpIcon className="size-4" />
+              <span className="sr-only">Send message</span>
+            </Button>
+          </div>
+        </div>
+      </div>
+    </form>
+  );
 }

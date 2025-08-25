@@ -3,17 +3,9 @@ import { ChatMessage } from "@/components/chat/chatMessage";
 
 export interface ChatListProps {
   messages: Message[];
-  status: "loading" | "streaming" | "idle" | string;
-  chatStyle?: "default" | "scenario" | "scenario-edit";
-  performingAction?: boolean;
-  enableClipboard?: boolean;
 }
 
-export function ChatList({
-  chatStyle = "default",
-  messages,
-  enableClipboard = true,
-}: ChatListProps) {
+export function ChatList({ messages }: ChatListProps) {
   if (!messages.length) {
     return null;
   }
@@ -22,11 +14,7 @@ export function ChatList({
     <div className="size-full space-y-4 px-2 md:space-y-8">
       {messages.map((message: Message, index: number) => (
         <div key={index} className="relative inset-x-0">
-          <ChatMessage
-            chatStyle={chatStyle}
-            enableClipboard={enableClipboard}
-            message={message}
-          />
+          <ChatMessage message={message} />
         </div>
       ))}
     </div>

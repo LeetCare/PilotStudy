@@ -4,32 +4,30 @@ import { Message } from "ai/react";
 import { Button, ButtonProps } from "../ui/button";
 import { Loader2 } from "lucide-react";
 
-interface EvaluationButtonProps extends ButtonProps {
+interface CompleteButtonProps extends ButtonProps {
   messages: Message[];
-  onEvaluate?: () => void;
-  isEvaluated?: boolean;
-  isEvaluating: boolean;
+  onComplete?: () => void;
+  isComplete?: boolean;
   disabled?: boolean;
 }
 
-export default function EvaluationButton({
-  onEvaluate,
-  isEvaluated,
-  isEvaluating,
+export default function CompleteButton({
+  onComplete: onComplete,
+  isComplete: isComplete,
   disabled,
   ...props
-}: EvaluationButtonProps) {
+}: CompleteButtonProps) {
   async function onClick() {
     try {
       const userConfirmed = window.confirm(
-        "Are you sure you want to evaluate? This action can only be done once."
+        "Are you sure you want to complete the scenario?"
       );
 
       if (!userConfirmed) {
         return;
       }
 
-      onEvaluate?.();
+      onComplete?.();
     } catch (error) {
       console.error(error);
     }
@@ -40,16 +38,10 @@ export default function EvaluationButton({
       {...props}
       onClick={onClick}
       variant="outline"
-      disabled={isEvaluated || isEvaluating || disabled}
+      disabled={isComplete || disabled}
       className="text-lg transition-color"
     >
-      {isEvaluated ? (
-        "Evaluated"
-      ) : isEvaluating ? (
-        <Loader2 className="h-4 w-4 animate-spin" />
-      ) : (
-        "Evaluate"
-      )}
+      {isComplete ? "Completed" : "Complete"}
     </Button>
   );
 }
