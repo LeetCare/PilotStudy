@@ -8,7 +8,6 @@
  * @author LeetCare Development Team
  */
 import ScenarioComponent from "@/components/scenario/scenario";
-import { VoiceType } from "@prisma/client";
 
 /**
  * Individual Scenario Page Component
@@ -132,7 +131,6 @@ You have access to:
 - create feedback for the student balancing constructive criticism with praise
 - provide a summary of the key points and takeaways for the student
 `,
-    voiceType: "youngMale" as VoiceType,
   };
 
   return <ScenarioComponent scenario={scenario} />;

@@ -9,8 +9,16 @@
  */
 
 import React, { FC, memo, ReactNode, HTMLAttributes } from "react";
-import ReactMarkdown from "react-markdown";
+import ReactMarkdown, { Options as ReactMarkdownOptions } from "react-markdown";
 import remarkGfm from "remark-gfm";
+
+/**
+ * Props interface for MemoizedReactMarkdown component
+ */
+interface MemoizedReactMarkdownProps extends ReactMarkdownOptions {
+  children: string;
+  className?: string;
+}
 
 /**
  * Memoized React Markdown Component
@@ -35,19 +43,28 @@ import remarkGfm from "remark-gfm";
  * - This component is taken from the Vercel AI SDK example chat application.
  * - the MDX plugin seems to break the markdown rendering when using `<` or `>` in the case, so we'll remove it for now.
  */
-export const MemoizedReactMarkdown: any  = memo(
-  (props) => (
-    <ReactMarkdown
-      {...props}
-      remarkPlugins={[remarkGfm, ...(props.remarkPlugins || [])]}
-      components={{
-        ...(props.components || {}),
-      }}
-    />
+export const MemoizedReactMarkdown: FC<MemoizedReactMarkdownProps> = memo(
+  ({ className, children, ...props }: MemoizedReactMarkdownProps) => (
+    <div className={className}>
+      <ReactMarkdown
+        {...props}
+        remarkPlugins={[remarkGfm, ...(props.remarkPlugins || [])]}
+        components={{
+          ...(props.components || {}),
+        }}
+      >
+        {children}
+      </ReactMarkdown>
+    </div>
   ),
-  (prevProps, nextProps) =>
+  (
+    prevProps: MemoizedReactMarkdownProps,
+    nextProps: MemoizedReactMarkdownProps
+  ) =>
     prevProps.children === nextProps.children &&
-    // prevProps.className === nextProps.className,
+    prevProps.className === nextProps.className &&
+    prevProps.remarkPlugins === nextProps.remarkPlugins &&
+    prevProps.components === nextProps.components
 );
 
 MemoizedReactMarkdown.displayName = "MemoizedReactMarkdown";
@@ -91,48 +108,7 @@ export const dataComponents = {
       </th>
     );
   },
-  tr({ children }: { children?: ReactNode }) {
-    /*
-     * Handles automatic column spanning for header rows with empty adjacent cells.
-     */
-    const isHeaderRow = React.Children.toArray(children).some((child) => {
-      return (
-        React.isValidElement(child) &&
-        typeof child.type === "function" &&
-        child.type.name === "th"
-      );
-    });
 
-    if (isHeaderRow) {
-      const childrenArray = React.Children.toArray(children);
-      if (childrenArray.length >= 2) {
-        const secondCell = childrenArray[1];
-        const isEmpty =
-          !React.isValidElement(secondCell) ||
-          !secondCell.props.children ||
-          (typeof secondCell.props.children === "string" &&
-            secondCell.props.children.trim() === "");
-
-        if (isEmpty && childrenArray[0]) {
-          const firstCell = React.cloneElement(
-            childrenArray[0] as React.ReactElement,
-            { colSpan: `${childrenArray.length}` },
-          );
-          return (
-            <tr className="border-b border-neutral-300 dark:border-neutral-700">
-              {firstCell}
-            </tr>
-          );
-        }
-      }
-    }
-
-    return (
-      <tr className="border-b border-neutral-300 dark:border-neutral-700">
-        {children}
-      </tr>
-    );
-  },
   td({ children }: { children?: ReactNode }) {
     return (
       <td className="border border-neutral-300 p-4 first:p-4 last:p-4 dark:border-neutral-700">

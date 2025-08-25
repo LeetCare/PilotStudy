@@ -10,26 +10,13 @@
 import type { Metadata } from "next";
 import "./globals.css";
 import React from "react";
-import { Analytics } from "@vercel/analytics/react";
-import { SpeedInsights } from "@vercel/speed-insights/next";
 import { Toaster } from "@/components/ui/sonner";
 
 export const metadata: Metadata = {
-  title: "RxPert",
+  title: "Pilot Study Simulator",
   description: "An Interactive and Personalized Patient Simulator.",
 };
 
-/**
- * Root Layout Component
- *
- * Top-level layout component for base HTML structure and
- * global providers. This component wraps all pages with providers
- * and analytics tracking (vercel and mixpanel) that need to be
- * available throughout the application.
- *
- * @see {@link https://nextjs.org/docs/app/getting-started/layouts-and-pages#creating-a-layout} For Next.js root layout
- * @see {@link https://vercel.com/analytics} For Vercel Analytics integration
- */
 export default function RootLayout({
   children,
 }: {
@@ -38,10 +25,8 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body className="font-pjs tracking-wide">
-          {children}
-          <Toaster />
-        <Analytics />
-        <SpeedInsights />
+        {children}
+        <Toaster />
       </body>
     </html>
   );

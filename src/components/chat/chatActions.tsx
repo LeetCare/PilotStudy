@@ -10,7 +10,10 @@
 
 "use client";
 
-import { type Message } from "ai";
+import { type UIMessage } from "@ai-sdk/react";
+
+// Type extension to handle both content formats
+type ExtendedUIMessage = UIMessage & { content?: string };
 
 import { Button } from "@/components/ui/button";
 import { IconCheck, IconCopy } from "@/components/ui/icons";
@@ -19,7 +22,7 @@ import { cn } from "@/lib/utils";
 
 interface ChatActionsProps extends React.ComponentProps<"div"> {
   /** The Message object containing content to provide actions for */
-  message: Message;
+  message: ExtendedUIMessage;
 }
 
 /**
@@ -56,14 +59,19 @@ export function ChatActions({
 
   const onCopy = () => {
     if (isCopied) return;
-    copyToClipboard(message.content);
+    // UIMessage can have content directly or parts array with text content
+    const messageText =
+      message.content ||
+      message.parts?.find((part) => part.type === "text")?.text ||
+      "";
+    copyToClipboard(String(messageText));
   };
 
   return (
     <div
       className={cn(
         "flex items-center justify-end transition-opacity group-hover:opacity-100 md:opacity-0",
-        className,
+        className
       )}
       {...props}
     >

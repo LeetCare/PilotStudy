@@ -12,10 +12,7 @@
 
 import * as React from "react";
 import { Dispatch, SetStateAction } from "react";
-import EvaluationTab from "../scenario/evaluationPanel";
 import PatientPanel from "../scenario/patientPanel";
-import { EvaluationSchema } from "@/lib/validation/evaluation";
-import { DeepPartial } from "ai";
 import { Button } from "@/components/ui/button";
 import { XIcon, MenuIcon } from "lucide-react";
 import { cn } from "@/lib/utils";
@@ -26,9 +23,6 @@ interface ChatSidebarProps {
 
   /** Patient case data containing symptoms, vitals, and medical history */
   patientInfo: string;
-
-  /** Evaluation results and scoring data when available */
-  evaluation?: DeepPartial<EvaluationSchema> | undefined;
 
   /** Whether the mobile drawer is currently open */
   drawerOpen: boolean;
@@ -61,23 +55,10 @@ interface ChatSidebarProps {
  */
 export default function ChatSidebar({
   patientInfo,
-  evaluation,
   isEvaluate = false,
   drawerOpen,
   setDrawerOpen,
 }: ChatSidebarProps) {
-  /*
-   * Renders appropriate tab content based on evaluation state.
-   */
-  const renderTab = () => {
-    switch (isEvaluate) {
-      case true:
-        return <EvaluationTab evaluation={evaluation} />;
-      default:
-        return <PatientPanel patientInfo={patientInfo} />;
-    }
-  };
-
   return (
     <>
       {/* Mobile drawer toggle button */}
@@ -93,14 +74,14 @@ export default function ChatSidebar({
 
       {/* Desktop sidebar */}
       <div className="hidden h-full w-1/3 flex-col bg-white shadow-lg lg:flex">
-        {renderTab()}
+        <PatientPanel patientInfo={patientInfo} />;
       </div>
 
       {/* Mobile drawer overlay */}
       <div
         className={cn(
           "fixed inset-0 z-50 bg-black/50 transition-opacity lg:hidden",
-          drawerOpen ? "opacity-100" : "pointer-events-none opacity-0",
+          drawerOpen ? "opacity-100" : "pointer-events-none opacity-0"
         )}
         onClick={() => setDrawerOpen(false)}
       />
@@ -109,7 +90,7 @@ export default function ChatSidebar({
       <div
         className={cn(
           "fixed top-0 right-0 z-50 h-full w-4/5 max-w-sm flex-col bg-white shadow-lg transition-transform duration-300 ease-in-out lg:hidden",
-          drawerOpen ? "translate-x-0" : "translate-x-full",
+          drawerOpen ? "translate-x-0" : "translate-x-full"
         )}
       >
         <Button
@@ -121,7 +102,9 @@ export default function ChatSidebar({
         >
           <XIcon className="h-6 w-6" />
         </Button>
-        <div className="h-full overflow-y-auto pt-14">{renderTab()}</div>
+        <div className="h-full overflow-y-auto pt-14">
+          <PatientPanel patientInfo={patientInfo} />
+        </div>
       </div>
     </>
   );

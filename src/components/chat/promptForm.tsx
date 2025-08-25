@@ -3,25 +3,17 @@
  *
  * This file contains the PromptForm component responsible for handling user input
  * in the chat interface. It supports both scenario and default modes with different
- * UI layouts and includes voice toggle functionality.
+ * UI layouts.
  *
  * @author LeetCare Development Team
  */
 
 import * as React from "react";
 import Textarea from "react-textarea-autosize";
-import { UseChatHelpers } from "ai/react";
+import { UIMessage } from "@ai-sdk/react";
 import { useEnterSubmit } from "@/lib/hooks/use-enter-submit";
 import { Button } from "@/components/ui/button";
-import {
-  ArrowUpIcon,
-  BookOpen,
-  LucideMic,
-  TextCursor,
-  Plus,
-  X,
-  Edit3,
-} from "lucide-react";
+import { ArrowUpIcon, BookOpen, Plus, X, Edit3 } from "lucide-react";
 import { IconArrowElbow } from "@/components/ui/icons";
 import { cn } from "@/lib/utils";
 import EvaluationButton from "@/components/chat/buttonEvaluation";
@@ -33,8 +25,15 @@ import {
 import { Input } from "@/components/ui/input";
 import { useState } from "react";
 
-export interface PromptProps
-  extends Pick<UseChatHelpers, "status" | "messages" | "input" | "setInput"> {
+export interface PromptProps {
+  /** Chat status */
+  status: "loading" | "idle" | string;
+  /** Messages array */
+  messages: UIMessage[];
+  /** Current input value */
+  input: string;
+  /** Function to set input value */
+  setInput: (value: string) => void;
   /** Whether the form should be disabled */
   disabled?: boolean;
 
@@ -52,12 +51,6 @@ export interface PromptProps
 
   /** Type identifier for form styling (scenario vs default vs scenario-edit) */
   type?: string;
-
-  /** State setter for voice mode toggle */
-  setIsVoice: React.Dispatch<React.SetStateAction<boolean>>;
-
-  /** Current voice mode state */
-  isVoice?: boolean;
 
   /** Tasks data for rubric display */
   tasks?: string[];
@@ -216,12 +209,12 @@ function EditableTasks({
  * PromptForm Component
  *
  * Chat input form with auto-resizing textarea and contextual controls.
- * Supports both scenario and default modes with voice toggle functionality.
+ * Supports both scenario and default modes.
  * Includes specialized features like rubric popover for training scenarios.
  *
  * @example
  * ```tsx
- * // Scenario form with voice toggle
+ * // Scenario form
  * <PromptForm
  *   onSubmit={sendMessage}
  *   input={message}
@@ -230,8 +223,7 @@ function EditableTasks({
  *   type="scenario"
  *   placeholder="Describe your symptoms..."
  *   disabled={false}
- *   setIsVoice={setVoiceMode}
- *   isVoice={false}
+
  *   tasks={rubricData}
  * />
  * ```
@@ -257,8 +249,7 @@ export function PromptForm({
   placeholder = "Write a message...",
   disabled = false,
   type,
-  setIsVoice,
-  isVoice = false,
+
   tasks,
   onTasksEdit,
   messages,
@@ -276,7 +267,7 @@ export function PromptForm({
       inputRef.current.focus();
       inputRef.current.setSelectionRange(
         inputRef.current.value.length,
-        inputRef.current.value.length,
+        inputRef.current.value.length
       );
     }
   }, []);
@@ -298,7 +289,7 @@ export function PromptForm({
         ref={formRef}
         className={cn(
           "relative flex w-full grow items-center overflow-hidden rounded-lg border border-neutral-200 bg-white p-2 shadow-xs",
-          disabled && "bg-neutral-100",
+          disabled && "bg-neutral-100"
         )}
       >
         <div className="flex size-full flex-col">
@@ -379,37 +370,9 @@ export function PromptForm({
               <Button
                 variant="outline"
                 size="icon"
-                type="button"
-                disabled={disabled && !isVoice}
-                className={cn(
-                  "flex size-8 items-center justify-between rounded-full border p-1.5 transition-all duration-500",
-                  !(disabled && !isVoice) && "group hover:w-36",
-                )}
-                onClick={() => setIsVoice(!isVoice)}
-              >
-                {isVoice ? (
-                  <div className="line-clamp-1 flex w-full items-center justify-end gap-2">
-                    <span className="hidden w-0 overflow-hidden text-xs whitespace-nowrap opacity-0 transition-all duration-300 group-hover:flex group-hover:w-full group-hover:opacity-100">
-                      Switch to Text
-                    </span>
-                    <TextCursor className="size-4" />
-                  </div>
-                ) : (
-                  <div className="line-clamp-1 flex w-full items-center justify-end gap-2">
-                    <span className="hidden w-0 overflow-hidden text-xs whitespace-nowrap opacity-0 transition-all duration-300 group-hover:flex group-hover:w-full group-hover:opacity-100">
-                      Switch to Voice
-                    </span>
-                    <LucideMic className="size-4" />
-                  </div>
-                )}
-                <span className="sr-only">Voice input</span>
-              </Button>
-              <Button
-                variant="outline"
-                size="icon"
                 className="flex size-8 items-center justify-center rounded-full border p-1.5 transition-colors duration-300 disabled:pointer-events-none"
                 type="submit"
-                disabled={status === "streaming" || input === "" || disabled}
+                disabled={status === "loading" || input === "" || disabled}
               >
                 <ArrowUpIcon className="size-4" />
                 <span className="sr-only">Send message</span>
@@ -456,7 +419,7 @@ export function PromptForm({
           className="rounded-xl disabled:cursor-not-allowed"
           type="submit"
           size="sm"
-          disabled={status === "streaming" || input === "" || disabled}
+          disabled={status === "loading" || input === "" || disabled}
         >
           <IconArrowElbow />
           <span className="sr-only">{placeholder}</span>

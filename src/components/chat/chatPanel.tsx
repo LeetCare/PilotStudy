@@ -9,17 +9,27 @@
  */
 
 import * as React from "react";
-import { type UseChatHelpers } from "ai/react";
+import { type UIMessage } from "@ai-sdk/react";
 import { Button } from "@/components/ui/button";
 import { PromptForm } from "@/components/chat/promptForm";
 import { ButtonScrollToBottom } from "@/components/chat/buttonScrollToBottom";
 import { IconRefresh, IconStop } from "@/components/ui/icons";
 
-export interface ChatPanelProps
-  extends Pick<
-    UseChatHelpers,
-    "append" | "status" | "reload" | "messages" | "stop" | "input" | "setInput"
-  > {
+export interface ChatPanelProps {
+  /** Chat status */
+  status: "loading" | "idle" | string;
+  /** Messages array */
+  messages: UIMessage[];
+  /** Function to stop streaming */
+  stop: () => void;
+  /** Function to send a message */
+  append: (message: { content: string; role: string }) => Promise<void>;
+  /** Function to reload/regenerate the last message */
+  reload: () => void;
+  /** Current input value */
+  input: string;
+  /** Function to set input value */
+  setInput: (value: string) => void;
   /** Whether the panel should be disabled */
   disabled?: boolean;
 
@@ -44,12 +54,6 @@ export interface ChatPanelProps
   /** Type identifier for panel styling and behavior */
   type?: string;
 
-  /** State setter for voice mode toggle */
-  setIsVoice: React.Dispatch<React.SetStateAction<boolean>>;
-
-  /** Current voice mode state */
-  isVoice: boolean;
-
   /** Whether evaluation mode is enabled */
   isEvaluate?: boolean;
 
@@ -71,7 +75,7 @@ export interface ChatPanelProps
  *
  * Bottom panel interface for chat input controls and contextual actions.
  * Provides adaptive controls including stop/reload buttons, scroll management, and evaluation functionality.
- * Seamlessly integrates voice mode switching and scenario-specific features.
+ * Seamlessly integrates scenario-specific features.
  *
  * @example
  * ```tsx
@@ -89,8 +93,7 @@ export interface ChatPanelProps
  *   scrollToBottom={scrollToBottom}
  *   placeholder="Describe your symptoms..."
  *   type="scenario"
- *   setIsVoice={setVoiceMode}
- *   isVoice={false}
+
  *   isEvaluate={false}
  *   onEvaluate={handleEvaluation}
  *   isScenario={true}
@@ -102,7 +105,7 @@ export interface ChatPanelProps
  *
  * @notes
  * - This component is taken from the Vercel AI SDK example chat application.
- * - Disables text input when voice mode is active, allowing seamless mode switching.
+
  * - For scenario-based training, includes an evaluation button that can be disabled during active evaluation.
  *
  * @todo
@@ -121,13 +124,11 @@ export function ChatPanel({
   scrollToBottom,
   placeholder,
   type,
-  setIsVoice,
-  isVoice,
+
   isEvaluate,
   onEvaluate,
   isScenario,
   tasks,
-  isScenarioCompleted,
   onTasksEdit,
 }: ChatPanelProps) {
   return (
@@ -135,7 +136,7 @@ export function ChatPanel({
       <div className="absolute bottom-0 z-[-10] size-full" />
       <div className="relative bottom-12 flex h-0 w-full justify-between px-6">
         <div className="w-10 opacity-0" />
-        {status === "streaming" ? (
+        {status === "loading" ? (
           <Button
             variant="outline"
             size="sm"
@@ -166,7 +167,7 @@ export function ChatPanel({
         <div className="flex w-full items-center justify-between gap-2 sm:gap-4 mb-4">
           <PromptForm
             type={type}
-            disabled={disabled || isVoice}
+            disabled={disabled}
             onSubmit={async (value) => {
               try {
                 await append({
@@ -181,13 +182,10 @@ export function ChatPanel({
             setInput={setInput}
             status={status}
             placeholder={placeholder}
-            setIsVoice={setIsVoice}
-            isVoice={isVoice}
             messages={messages} // ADDED: Pass messages to PromptForm
             onEvaluate={onEvaluate}
             isEvaluate={isEvaluate}
             isScenario={isScenario}
-            isScenarioCompleted={isScenarioCompleted}
             tasks={tasks}
             onTasksEdit={onTasksEdit}
           />

@@ -8,38 +8,23 @@
  * @author LeetCare Development Team
  */
 
-import { type Message } from "ai";
+import { type UIMessage } from "@ai-sdk/react";
 import { ChatMessage } from "@/components/chat/chatMessage";
-import { UseChatHelpers } from "ai/react";
+import { ChatStatus } from "ai";
 
-export interface ChatListProps
-  extends Pick<UseChatHelpers, "messages" | "status"> {
+export interface ChatListProps {
+  /** Array of messages to display */
+  messages: UIMessage[];
+  /** Current chat status */
+  status: ChatStatus;
   /** Visual style variant for the chat messages */
   chatStyle?: "default" | "scenario" | "scenario-edit";
 
   /** Whether an action is currently being performed */
   performingAction?: boolean;
 
-  /** Function to add tool execution results from LLM tool calls to the chat */
-  addToolResult: ({
-    toolCallId,
-    result,
-  }: {
-    toolCallId: string;
-    result: any;
-  }) => void;
-
   /** Whether to enable clipboard functionality for messages */
   enableClipboard?: boolean;
-
-  /** Callback for when message content is edited (only for scenario-edit mode) */
-  onStartingMessageEdit?: (newContent: string) => void;
-
-  /** Optional persona prompt for the AI patient */
-  personaPrompt?: string;
-
-  /** Callback for when persona prompt is edited */
-  onPersonaEdit?: (newPersona: string) => void;
 }
 
 /**
@@ -77,11 +62,7 @@ export interface ChatListProps
 export function ChatList({
   chatStyle = "default",
   messages,
-  addToolResult,
   enableClipboard = true,
-  onStartingMessageEdit,
-  personaPrompt,
-  onPersonaEdit,
 }: ChatListProps) {
   if (!messages.length) {
     return null;
@@ -89,16 +70,12 @@ export function ChatList({
 
   return (
     <div className="size-full space-y-4 px-2 md:space-y-8">
-      {messages.map((message: Message, index) => (
+      {messages.map((message: UIMessage, index: number) => (
         <div key={index} className="relative inset-x-0">
           <ChatMessage
             chatStyle={chatStyle}
             enableClipboard={enableClipboard}
             message={message}
-            addToolResult={addToolResult}
-            onStartingMessageEdit={onStartingMessageEdit}
-            personaPrompt={personaPrompt}
-            onPersonaEdit={onPersonaEdit}
             messageIndex={index}
           />
         </div>
