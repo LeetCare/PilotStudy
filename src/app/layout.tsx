@@ -1,7 +1,6 @@
 import type { Metadata } from "next";
 import "./globals.css";
 import React from "react";
-import { Toaster } from "@/components/ui/sonner";
 
 export const metadata: Metadata = {
   title: "Pilot Study Simulator",
@@ -15,10 +14,7 @@ export default function RootLayout({
 }) {
   return (
     <html lang="en">
-      <body className="font-pjs tracking-wide">
-        {children}
-        <Toaster />
-      </body>
+      <body className="font-pjs tracking-wide">{children}</body>
     </html>
   );
 }
