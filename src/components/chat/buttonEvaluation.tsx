@@ -2,7 +2,6 @@
 
 import { Message } from "ai/react";
 import { Button, ButtonProps } from "../ui/button";
-import { Loader2 } from "lucide-react";
 
 interface CompleteButtonProps extends ButtonProps {
   messages: Message[];
