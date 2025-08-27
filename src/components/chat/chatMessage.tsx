@@ -2,7 +2,7 @@ import remarkGfm from "remark-gfm";
 import { cn } from "@/lib/utils";
 import { MemoizedReactMarkdown } from "@/components/markdown/markdown";
 import { IconUser } from "@/components/ui/icons";
-import { Message } from "@ai-sdk/react";
+import { Message } from "ai/react";
 
 export interface ChatMessageProps {
   message: Message;
