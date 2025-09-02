@@ -63,7 +63,6 @@ export default function ScenarioComponent({ scenario }: ScenarioProps) {
             status={status}
             append={append}
             enableClipboard={false}
-            onTakeBP={handleTakeBP}
           />
         ) : (
           <ChatInstructions

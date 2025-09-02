@@ -1,8 +1,6 @@
 import { NextRequest } from "next/server";
 import { streamText } from "ai";
 import { togetherai } from "@ai-sdk/togetherai";
-import { getMyLogBook } from "@/lib/tools/getBPlogs";
-import { takeBP } from "@/lib/tools/takeBP";
 
 export const maxDuration = 30;
 export const dynamic = "force-dynamic";
