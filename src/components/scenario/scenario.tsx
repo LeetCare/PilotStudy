@@ -15,6 +15,7 @@ interface ScenarioProps {
 export default function ScenarioComponent({ scenario }: ScenarioProps) {
   const [drawerOpen, setDrawerOpen] = useState(false);
   const [begun, setBegun] = useState(false);
+  const [completed, setCompleted] = useState(false);
 
   const { startingMessage, patientInfo } = scenario;
 
@@ -35,17 +36,14 @@ export default function ScenarioComponent({ scenario }: ScenarioProps) {
         personaPrompt: scenario.personaPrompt,
         description: scenario.description,
       },
-      streamProtocol: "data",
+      streamProtocol: "text",
     });
 
   const scrollRef = useRef<HTMLDivElement>(null);
 
-  const handleTakeBP = async () => {
-    // Trigger the getBP tool by sending a message that will cause the AI to use the tool
-    await append({
-      content: "*Taking Alice Johnson's blood pressure reading...*",
-      role: "user",
-    });
+  const handleComplete = () => {
+    setCompleted(true);
+    alert("Scenario completed successfully! Session data has been saved.");
   };
 
   return (
@@ -63,6 +61,7 @@ export default function ScenarioComponent({ scenario }: ScenarioProps) {
             status={status}
             append={append}
             enableClipboard={false}
+            onComplete={handleComplete}
           />
         ) : (
           <ChatInstructions

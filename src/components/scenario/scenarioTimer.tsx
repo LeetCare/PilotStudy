@@ -50,12 +50,6 @@ export default function ScenarioTimer({ begun }: { begun: boolean }) {
     setIsPaused(false);
   };
 
-  const refreshTimer = () => {
-    setSeconds(0);
-    setIsRunning(false);
-    setIsPaused(false);
-  };
-
   if (!begun) {
     return (
       <Button disabled onClick={handleStartTimer}>
@@ -68,9 +62,6 @@ export default function ScenarioTimer({ begun }: { begun: boolean }) {
     <div>
       {isRunning ? (
         <div className="flex items-center gap-2">
-          <Button variant="outline" size="icon" onClick={refreshTimer}>
-            <RotateCcw className="size-4" />
-          </Button>
           <Button
             variant="outline"
             className="flex w-32 items-center justify-between"

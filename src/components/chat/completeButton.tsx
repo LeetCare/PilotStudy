@@ -11,6 +11,7 @@ interface CompleteButtonProps extends ButtonProps {
 }
 
 export default function CompleteButton({
+  messages,
   onComplete: onComplete,
   isComplete: isComplete,
   disabled,
@@ -26,9 +27,31 @@ export default function CompleteButton({
         return;
       }
 
+      // Call the save API to log the messages
+      const response = await fetch("/api/save", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ messages }),
+      });
+
+      if (!response.ok) {
+        const errorData = await response.json();
+        throw new Error(errorData.error || "Failed to save messages");
+      }
+
+      const result = await response.json();
+      console.log("Messages saved successfully:", result);
+
       onComplete?.();
     } catch (error) {
-      console.error(error);
+      console.error("Error saving messages:", error);
+      // Show error to user but still proceed with completion
+      alert(
+        "There was an error saving the session data, but the scenario will still be completed."
+      );
+      onComplete?.();
     }
   }
 
