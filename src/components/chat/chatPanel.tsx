@@ -60,7 +60,7 @@ export function ChatPanel({
         />
       </div>
       <div className="mx-0 w-full max-w-screen">
-        <div className="flex w-full items-center justify-between gap-2 sm:gap-4 mb-4">
+        <div className="flex w-full items-center justi  y-between gap-2 sm:gap-4 mb-4">
           <PromptForm
             disabled={disabled}
             onSubmit={async (value) => {

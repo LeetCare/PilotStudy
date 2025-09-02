@@ -4,7 +4,7 @@ import { useEnterSubmit } from "@/lib/hooks/use-enter-submit";
 import { Button } from "@/components/ui/button";
 import { ArrowUpIcon } from "lucide-react";
 import { cn } from "@/lib/utils";
-import CompleteButton from "@/components/chat/buttonEvaluation";
+import CompleteButton from "@/components/chat/completeButton";
 
 import { Message } from "@ai-sdk/react";
 
