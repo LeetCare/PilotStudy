@@ -204,60 +204,52 @@ As a pharmacy intern at Mountainview Primary Clinic, you will be seeing a patien
 When you want to check the patient's blood pressure during the conversation:
 
 * Ask the AI: "Please provide the standardized blood pressure and pulse readings for this patient"
-* The AI will provide the readings to use for the rest of the interaction
 * Share these readings with the patient
-* Use these readings for your clinical decisions and counseling
-* The patient's blood pressure history will align with these readings
 
 ---
-## Student Learning Objectives and Scenario Guide
+## Rubric
+### Set the Stage for the Visit
+| Sub-section | Points |
+|------------|--------|
+| Prepare | 1 |
+| Build Rapport | 3 |
+| Agenda Setting | 4 |
 
-### Primary Learning Goals
-1. **Patient Assessment Skills**: Conduct a focused interview for hypertension management
-2. **Clinical Decision Making**: Evaluate medication effectiveness and identify optimization opportunities
-3. **Communication Skills**: Practice professional patient interaction and counseling techniques
-4. **Time Management**: Complete comprehensive assessment within allocated timeframe
-5. **Documentation Preparation**: Gather information for preceptor presentation
+### Middle of the Visit
+| Sub-section | Points |
+|------------|--------|
+| Elicit the Patient's Perspective | 12 |
+| Listen & Assess | 2 |
+| Respond | 12 |
 
-### Key Clinical Skills to Demonstrate
-* **AIDET Communication Framework**:
-  - **A**cknowledge the patient warmly
-  - **I**ntroduce yourself and your role
-  - **D**uration - explain how long the visit will take
-  - **E**xplanation - describe what you'll be doing
-  - **T**hank the patient for their time
+### Transition to BP
+| Sub-section | Points |
+|------------|--------|
+| Transition to BP | 1 |
 
-* **Medication History Assessment**:
-  - Current medications and dosing
-  - Adherence patterns and barriers
-  - Side effects or adverse reactions
-  - Patient understanding of medications
-  - Cost and access concerns
+### Blood Pressure Measurement
+| Sub-section | Points |
+|------------|--------|
+| Communication Steps | 3 |
+| Measurement Steps | 4 |
+| Overall Demeanor in Measuring BP | 4 |
 
-* **Blood Pressure Monitoring**:
-  - Patient education on home monitoring
-  - Interpretation of readings in clinical context
+### Wrap up the Patient Interview
+| Sub-section | Points |
+|------------|--------|
+| Close the Patient Interview | 1 |
 
-### Assessment Areas
-* **Purpose Explanation**: Clearly state the visit's objective and your role
-* **Concern Elicitation**: Ask open-ended questions to identify patient concerns
-* **Time Management**: Establish session duration and scope appropriately
-* **Shared Prioritization**: Collaboratively organize discussion topics
+### Style, Flow and Timing
+| Sub-section | Points |
+|------------|--------|
+| Style | 6 |
+| Flow | 2 |
+| Timing | 1 |
 
-### Clinical Context Notes
-* This is a follow-up visit for established hypertension
-* Patient has been on current regimen for 4 months
-* Focus on medication optimization and lifestyle counseling
-* Prepare recommendations for interdisciplinary team discussion
-* Consider adherence, efficacy, and tolerability of current therapy
-
-### Preparation Tips for Students
-1. Review hypertension guidelines and target blood pressure goals
-2. Understand mechanism of action for ACE inhibitors and thiazide diuretics
-3. Prepare questions about lifestyle modifications (diet, exercise, sodium intake)
-4. Practice blood pressure measurement technique
-5. Review common side effects of lisinopril and chlorthalidone
-6. Prepare to discuss adherence strategies and monitoring parameters`,
+###
+| Total | Points |
+|------------|--------|
+| All Sections | 56 |`,
   };
 
   return <ScenarioComponent scenario={scenario} />;

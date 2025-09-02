@@ -14,6 +14,7 @@ export const MemoizedReactMarkdown: FC<MemoizedReactMarkdownProps> = memo(
         {...props}
         remarkPlugins={[remarkGfm, ...(props.remarkPlugins || [])]}
         components={{
+          ...dataComponents,
           ...(props.components || {}),
         }}
       >
