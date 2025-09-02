@@ -22,6 +22,7 @@ export interface ChatProps
   scrollRef: RefObject<HTMLDivElement>;
   enableClipboard?: boolean;
   disabled?: boolean;
+  onTakeBP?: () => void;
 }
 
 export default function Chat({
@@ -34,6 +35,7 @@ export default function Chat({
   disabled = false,
   status,
   append,
+  onTakeBP,
 }: ChatProps) {
   const { isAtBottom, scrollToBottom } = useAtBottom(scrollRef);
 
@@ -66,6 +68,7 @@ export default function Chat({
           isAtBottom={isAtBottom}
           scrollToBottom={scrollToBottom}
           placeholder={"Write a message..."}
+          onTakeBP={onTakeBP}
         />
       </div>
     </div>

@@ -27,28 +27,26 @@ export default function ScenarioComponent({ scenario }: ScenarioProps) {
   ];
 
   initialMessages[0].content = initialMessages[0].content.replace(/\\n/g, "\n");
-  const {
-    messages,
-    input,
-    stop,
-    setInput,
-    status,
-    append,
-    reload,
-
-    setMessages,
-  } = useChat({
-    id: scenario.id,
-    initialMessages,
-    body: {
-      patientInfo,
-      personaPrompt: scenario.personaPrompt,
-      description: scenario.description,
-    },
-    streamProtocol: "text",
-  });
+  const { messages, input, stop, setInput, status, append, setMessages } =
+    useChat({
+      initialMessages,
+      body: {
+        patientInfo,
+        personaPrompt: scenario.personaPrompt,
+        description: scenario.description,
+      },
+      streamProtocol: "data",
+    });
 
   const scrollRef = useRef<HTMLDivElement>(null);
+
+  const handleTakeBP = async () => {
+    // Trigger the getBP tool by sending a message that will cause the AI to use the tool
+    await append({
+      content: "*Taking Alice Johnson's blood pressure reading...*",
+      role: "user",
+    });
+  };
 
   return (
     <div className="flex h-[calc(100dvh-5rem)] w-full md:h-dvh">
@@ -65,6 +63,7 @@ export default function ScenarioComponent({ scenario }: ScenarioProps) {
             status={status}
             append={append}
             enableClipboard={false}
+            onTakeBP={handleTakeBP}
           />
         ) : (
           <ChatInstructions

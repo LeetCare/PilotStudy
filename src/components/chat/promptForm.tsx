@@ -4,7 +4,8 @@ import { useEnterSubmit } from "@/lib/hooks/use-enter-submit";
 import { Button } from "@/components/ui/button";
 import { ArrowUpIcon } from "lucide-react";
 import { cn } from "@/lib/utils";
-import CompleteButton from "@/components/chat/buttonEvaluation";
+import CompleteButton from "@/components/chat/completeButton";
+import { TakeBPButton } from "@/components/chat/takeBPButton";
 
 import { Message } from "@ai-sdk/react";
 
@@ -15,6 +16,7 @@ export interface PromptProps {
   setInput: (value: string) => void;
   disabled?: boolean;
   onSubmit: (value: string) => void;
+  onTakeBP?: () => void;
   placeholder?: string;
 }
 
@@ -24,6 +26,7 @@ export function PromptForm({
   input,
   setInput,
   status,
+  onTakeBP,
   placeholder = "Write a message...",
   disabled = false,
 }: PromptProps) {
@@ -81,6 +84,13 @@ export function PromptForm({
               isComplete={false}
               disabled={disabled}
             />
+            {onTakeBP && (
+              <TakeBPButton
+                onTakeBP={onTakeBP}
+                disabled={disabled}
+                messages={messages}
+              />
+            )}
           </div>
 
           <div className="flex items-center space-x-1 px-1">

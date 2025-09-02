@@ -1,6 +1,8 @@
 import { NextRequest } from "next/server";
 import { streamText } from "ai";
 import { togetherai } from "@ai-sdk/togetherai";
+import { getMyLogBook } from "@/lib/tools/getBPlogs";
+import { takeBP } from "@/lib/tools/takeBP";
 
 export const maxDuration = 30;
 export const dynamic = "force-dynamic";
@@ -13,11 +15,11 @@ export async function POST(req: NextRequest) {
   const messages = body.messages ?? [];
 
   const result = await streamText({
-    model: togetherai("meta-llama/Llama-3.3-70B-Instruct-Turbo"),
+    model: togetherai("moonshotai/Kimi-K2-Instruct"),
     temperature: 0.9,
     system: personaPrompt,
     messages,
   });
 
-  return result.toTextStreamResponse();
+  return result.toDataStreamResponse();
 }
