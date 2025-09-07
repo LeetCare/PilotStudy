@@ -44,6 +44,7 @@ export async function POST(req: NextRequest) {
         success: true,
         // id: messageDoc._id,
         messageCount: messages.length,
+        totalTime: timer,
       }),
       {
         status: 200,
