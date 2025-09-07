@@ -25,6 +25,7 @@ export interface ChatPanelProps
   scrollToBottom: () => void;
   placeholder?: string;
   onComplete?: () => void;
+  timer: number;
 }
 
 export function ChatPanel({
@@ -39,6 +40,7 @@ export function ChatPanel({
   scrollToBottom,
   placeholder,
   onComplete,
+  timer
 }: ChatPanelProps) {
   return (
     <div className="bg-background/80 sticky bottom-0 backdrop-blur-2xl">
@@ -81,6 +83,7 @@ export function ChatPanel({
             placeholder={placeholder}
             messages={messages}
             onComplete={onComplete}
+            timer={timer}
           />
         </div>
       </div>

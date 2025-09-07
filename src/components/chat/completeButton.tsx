@@ -8,6 +8,7 @@ interface CompleteButtonProps extends ButtonProps {
   onComplete?: () => void;
   isComplete?: boolean;
   disabled?: boolean;
+  timer: number;
 }
 
 export default function CompleteButton({
@@ -15,6 +16,7 @@ export default function CompleteButton({
   onComplete: onComplete,
   isComplete: isComplete,
   disabled,
+  timer,
   ...props
 }: CompleteButtonProps) {
   async function onClick() {
@@ -33,7 +35,7 @@ export default function CompleteButton({
         headers: {
           "Content-Type": "application/json",
         },
-        body: JSON.stringify({ messages }),
+        body: JSON.stringify({ messages, timer }),
       });
 
       if (!response.ok) {
@@ -45,6 +47,8 @@ export default function CompleteButton({
       console.log("Messages saved successfully:", result);
 
       onComplete?.();
+
+
     } catch (error) {
       console.error("Error saving messages:", error);
       // Show error to user but still proceed with completion

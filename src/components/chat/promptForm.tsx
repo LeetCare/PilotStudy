@@ -17,6 +17,7 @@ export interface PromptProps {
   onSubmit: (value: string) => void;
   placeholder?: string;
   onComplete?: () => void;
+  timer: number;
 }
 
 export function PromptForm({
@@ -28,6 +29,7 @@ export function PromptForm({
   placeholder = "Write a message...",
   disabled = false,
   onComplete,
+  timer
 }: PromptProps) {
   const { formRef, onKeyDown } = useEnterSubmit();
 
@@ -83,6 +85,7 @@ export function PromptForm({
               isComplete={false}
               disabled={disabled}
               onComplete={onComplete}
+              timer={timer}
             />
           </div>
 
