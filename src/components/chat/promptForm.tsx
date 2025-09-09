@@ -82,7 +82,6 @@ export function PromptForm({
           <div className="flex items-center space-x-1 px-1">
             <CompleteButton
               messages={messages}
-              isComplete={false}
               disabled={disabled}
               onComplete={onComplete}
               timer={timer}

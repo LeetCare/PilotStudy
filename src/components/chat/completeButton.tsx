@@ -2,11 +2,11 @@
 
 import { Message } from "ai/react";
 import { Button, ButtonProps } from "../ui/button";
+import { useState } from "react";
 
 interface CompleteButtonProps extends ButtonProps {
   messages: Message[];
   onComplete?: () => void;
-  isComplete?: boolean;
   disabled?: boolean;
   timer: number;
 }
@@ -14,11 +14,11 @@ interface CompleteButtonProps extends ButtonProps {
 export default function CompleteButton({
   messages,
   onComplete: onComplete,
-  isComplete: isComplete,
   disabled,
   timer,
   ...props
 }: CompleteButtonProps) {
+  const [saved, setSaved] = useState(false);
   async function onClick() {
     try {
       const userConfirmed = window.confirm(
@@ -45,6 +45,7 @@ export default function CompleteButton({
 
       const result = await response.json();
       console.log("Messages saved successfully:", result);
+      setSaved(true);
 
       onComplete?.();
 
@@ -64,10 +65,10 @@ export default function CompleteButton({
       {...props}
       onClick={onClick}
       variant="outline"
-      disabled={isComplete || disabled}
+      disabled={saved || disabled}
       className="text-lg transition-color"
     >
-      {isComplete ? "Completed" : "Complete"}
+      {saved ? "Completed" : "Complete"}
     </Button>
   );
 }
