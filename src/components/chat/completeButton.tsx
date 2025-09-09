@@ -22,7 +22,7 @@ export default function CompleteButton({
   async function onClick() {
     try {
       const userConfirmed = window.confirm(
-        "Are you sure you want to complete the scenario?"
+        "Are you sure you want to complete the scenario? This cannot be undone."
       );
 
       if (!userConfirmed) {
