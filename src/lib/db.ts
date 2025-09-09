@@ -4,6 +4,7 @@ import dotenv from 'dotenv';
 dotenv.config();
 
 // Use MONGODB_URL as the environment variable name
+console.log('process.env:', process.env);
 
 const DATABASE_URL = process.env.DATABASE_URL;
 console.log('MONGODB_URL:', DATABASE_URL);
