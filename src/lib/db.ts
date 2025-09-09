@@ -5,8 +5,8 @@ dotenv.config();
 
 // Use MONGODB_URL as the environment variable name
 
-const MONGODB_URL = process.env.DATABASE_URL;
-console.log('MONGODB_URL:', MONGODB_URL);
+const DATABASE_URL = process.env.DATABASE_URL;
+console.log('MONGODB_URL:', DATABASE_URL);
 
 declare global {
     var mongoose: {
@@ -15,7 +15,7 @@ declare global {
     };
 }
 
-if (!MONGODB_URL) {
+if (!DATABASE_URL) {
   throw new Error('Please define the MONGODB_URL environment variable');
 }
 
