@@ -7,7 +7,7 @@ export const dynamic = "force-dynamic";
 
 export async function POST(req: NextRequest) {
   try {
-    // await dbConnect();
+    await dbConnect();
 
     const body = await req.json();
     const { messages, timer } = body;
