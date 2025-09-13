@@ -16,6 +16,7 @@ export default function ScenarioComponent({ scenario }: ScenarioProps) {
   const [drawerOpen, setDrawerOpen] = useState(false);
   const [begun, setBegun] = useState(false);
   const [completed, setCompleted] = useState(false);
+  const [timer, setTimer] = useState(0);
 
   const { startingMessage, patientInfo } = scenario;
 
@@ -49,7 +50,7 @@ export default function ScenarioComponent({ scenario }: ScenarioProps) {
   return (
     <div className="flex h-[calc(100dvh-5rem)] w-full md:h-dvh">
       <div className="flex w-full flex-col items-center overflow-hidden lg:w-2/3">
-        <ChatHeader begun={begun} title={scenario.title} />
+        <ChatHeader begun={begun} title={scenario.title} setTimer={setTimer}/>
         {begun ? (
           <Chat
             setMessages={setMessages}
@@ -62,6 +63,7 @@ export default function ScenarioComponent({ scenario }: ScenarioProps) {
             append={append}
             enableClipboard={false}
             onComplete={handleComplete}
+            timer={timer}
           />
         ) : (
           <ChatInstructions

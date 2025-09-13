@@ -37,23 +37,10 @@ export function ChatMessage({ message, ...props }: ChatMessageProps) {
           remarkPlugins={[remarkGfm]}
           components={{
             em({ children }) {
-              return (
-                <em className={cn("text-neutral-600 dark:text-neutral-400")}>
-                  {children}
-                </em>
-              );
+              return <em className="text-neutral-500">{children}</em>;
             },
             p({ children }) {
-              return (
-                <p
-                  className={cn(
-                    message.role === "user" && "dark:text-neutral-400",
-                    "last:pb-0"
-                  )}
-                >
-                  {children}
-                </p>
-              );
+              return <p className="last:pb-0 text-neutral-800">{children}</p>;
             },
           }}
         >

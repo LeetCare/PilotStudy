@@ -1,16 +1,16 @@
 import { NextRequest } from "next/server";
-// import dbConnect from "@/lib/db";
-// import Messages from "@/lib/models/messages";
+import dbConnect from "@/lib/db";
+import Messages from "@/lib/models/schema";
 
 export const maxDuration = 30;
 export const dynamic = "force-dynamic";
 
 export async function POST(req: NextRequest) {
   try {
-    // await dbConnect();
+    await dbConnect();
 
     const body = await req.json();
-    const { messages } = body;
+    const { messages, timer } = body;
 
     if (!messages || !Array.isArray(messages)) {
       return new Response(
@@ -22,25 +22,29 @@ export async function POST(req: NextRequest) {
       );
     }
 
-    // // Create a new document with the messages and timestamp
-    // const messageDoc = new Messages({
-    //   messages: messages,
-    //   createdAt: new Date(),
-    // });
+    // Create a new document with the messages and timestamp
+    const messageDoc = new Messages({
+      messages: messages,
+      createdAt: new Date(),
+      totalTime: timer,
+    });
 
-    // await messageDoc.save();
+    await messageDoc.save();
 
-    // console.log("Messages saved successfully:", {
-    //   id: messageDoc._id,
-    //   messageCount: messages.length,
-    //   createdAt: messageDoc.createdAt,
-    // });
+    console.log("Messages saved successfully:", {
+      id: messageDoc._id,
+      messageCount: messages.length,
+      createdAt: messageDoc.createdAt,
+    });
+
+    console.log("Total time (seconds):", timer);
 
     return new Response(
       JSON.stringify({
         success: true,
         // id: messageDoc._id,
         messageCount: messages.length,
+        totalTime: timer,
       }),
       {
         status: 200,

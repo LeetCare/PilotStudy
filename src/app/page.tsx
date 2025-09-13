@@ -12,7 +12,10 @@ export default async function HTNScenarioPage() {
 | **Gender** | F |
 
 * **Allergies:** NKDA (No Known Drug Allergies)
+* **Allergies:** NKDA (No Known Drug Allergies)
 
+### Chief Complaint (CC)
+Alice Johnson is a 58-year-old patient referred to ambulatory care pharmacy service by her PCP Dr. Martinez for blood pressure management.
 ### Chief Complaint (CC)
 Alice Johnson is a 58-year-old patient referred to ambulatory care pharmacy service by her PCP Dr. Martinez for blood pressure management.
 
@@ -21,8 +24,12 @@ Alice Johnson is a 58-year-old patient referred to ambulatory care pharmacy serv
 
 ### Family History
 * Father: CVA at age 45
+* Father: CVA at age 45
 
 ### Social History
+* **Occupation:** Assistant Manager at Bath & Body Works
+* **Insurance:** Blue Cross Blue Shield PPO plan
+* **Support:** Lives alone, has family support
 * **Occupation:** Assistant Manager at Bath & Body Works
 * **Insurance:** Blue Cross Blue Shield PPO plan
 * **Support:** Lives alone, has family support
@@ -147,6 +154,12 @@ Alice Johnson is a 58-year-old patient referred to ambulatory care pharmacy serv
     - Use a maximum of 4-6 sentences per dialog, and 2 actions.
   </flow>
 </formatting>
+
+<template>
+  *action*
+
+  "character's response"
+</template>
 
 <template>
   *action*
