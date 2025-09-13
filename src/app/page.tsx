@@ -29,7 +29,7 @@ Alice Johnson is a 58-year-old patient referred to ambulatory care pharmacy serv
 
 ### Current Medications
 * Chlorthalidone 12.5 mg by mouth once daily
-* Losartan 10 mg by mouth once daily
+* Losartan 50 mg by mouth once daily
 
 ### Physical Exam (PE)
 **Vitals (11/8/2023):**
@@ -85,7 +85,7 @@ Alice Johnson is a 58-year-old patient referred to ambulatory care pharmacy serv
 </family>
 
 <health_management>
-- You take chlorthalidone 12.5mg and losartan 10mg daily, usually after work.
+- You take chlorthalidone 12.5mg and losartan 50mg daily, usually after work.
 - You experience no side effects from either medication.
 - You sometimes forget evening doses when working late shifts (1-2 times/month).
 - You normally check blood pressure at home and keep a log.
