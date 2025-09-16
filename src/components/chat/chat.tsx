@@ -23,6 +23,7 @@ export interface ChatProps
   enableClipboard?: boolean;
   disabled?: boolean;
   onComplete?: () => void;
+  timer: number;
 }
 
 export default function Chat({
@@ -36,6 +37,7 @@ export default function Chat({
   status,
   append,
   onComplete,
+  timer,
 }: ChatProps) {
   const { isAtBottom, scrollToBottom } = useAtBottom(scrollRef);
 
@@ -69,6 +71,7 @@ export default function Chat({
           scrollToBottom={scrollToBottom}
           placeholder={"Write a message..."}
           onComplete={onComplete}
+          timer={timer}
         />
       </div>
     </div>

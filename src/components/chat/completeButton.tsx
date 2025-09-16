@@ -2,25 +2,27 @@
 
 import { Message } from "ai/react";
 import { Button, ButtonProps } from "../ui/button";
+import { useState } from "react";
 
 interface CompleteButtonProps extends ButtonProps {
   messages: Message[];
   onComplete?: () => void;
-  isComplete?: boolean;
   disabled?: boolean;
+  timer: number;
 }
 
 export default function CompleteButton({
   messages,
   onComplete: onComplete,
-  isComplete: isComplete,
   disabled,
+  timer,
   ...props
 }: CompleteButtonProps) {
+  const [saved, setSaved] = useState(false);
   async function onClick() {
     try {
       const userConfirmed = window.confirm(
-        "Are you sure you want to complete the scenario?"
+        "Are you sure you want to complete the scenario? This cannot be undone."
       );
 
       if (!userConfirmed) {
@@ -33,7 +35,7 @@ export default function CompleteButton({
         headers: {
           "Content-Type": "application/json",
         },
-        body: JSON.stringify({ messages }),
+        body: JSON.stringify({ messages, timer }),
       });
 
       if (!response.ok) {
@@ -43,8 +45,11 @@ export default function CompleteButton({
 
       const result = await response.json();
       console.log("Messages saved successfully:", result);
+      setSaved(true);
 
       onComplete?.();
+
+
     } catch (error) {
       console.error("Error saving messages:", error);
       // Show error to user but still proceed with completion
@@ -60,10 +65,10 @@ export default function CompleteButton({
       {...props}
       onClick={onClick}
       variant="outline"
-      disabled={isComplete || disabled}
+      disabled={saved || disabled}
       className="text-lg transition-color"
     >
-      {isComplete ? "Completed" : "Complete"}
+      {saved ? "Completed" : "Complete"}
     </Button>
   );
 }

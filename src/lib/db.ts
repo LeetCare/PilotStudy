@@ -1,6 +1,13 @@
 import mongoose from 'mongoose';
+import dotenv from 'dotenv';
 
-const MONGODB_URI = process.env.MONGODB_URI;
+dotenv.config();
+
+// Use MONGODB_URL as the environment variable name
+console.log('process.env:', process.env);
+
+const DATABASE_URL = process.env.DATABASE_URL;
+console.log('MONGODB_URL:', DATABASE_URL);
 
 declare global {
     var mongoose: {
@@ -9,8 +16,8 @@ declare global {
     };
 }
 
-if (!MONGODB_URI) {
-  throw new Error('Please define the MONGODB_URI environment variable');
+if (!DATABASE_URL) {
+  throw new Error('Please define the MONGODB_URL environment variable');
 }
 
 let cached = global.mongoose; // Use global variable for caching

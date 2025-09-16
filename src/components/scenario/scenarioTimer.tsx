@@ -4,7 +4,14 @@ import { Pause, Play, RotateCcw } from "lucide-react";
 import { useState, useEffect } from "react";
 import { Button } from "../ui/button";
 
-export default function ScenarioTimer({ begun }: { begun: boolean }) {
+interface ScenarioTimerProps {
+  begun: boolean;
+  setTimer: (time: number) => void;
+}
+
+export default function ScenarioTimer(
+  { begun, setTimer }: ScenarioTimerProps
+) {
   const [isRunning, setIsRunning] = useState(false);
   const [isPaused, setIsPaused] = useState(false);
   const [seconds, setSeconds] = useState(0);
@@ -36,6 +43,10 @@ export default function ScenarioTimer({ begun }: { begun: boolean }) {
       }
     };
   }, [isRunning, isPaused]);
+
+  useEffect(() => {
+    setTimer(seconds); // Notify the parent component of the updated time
+  }, [seconds, setTimer]);
 
   const handleStartTimer = () => {
     setIsRunning(true);
