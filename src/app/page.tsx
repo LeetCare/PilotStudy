@@ -1,6 +1,15 @@
 import ScenarioComponent from "@/components/scenario/scenario";
 
 export default async function HTNScenarioPage() {
+  // Calculate date 3 months before current date
+  const threeMonthsAgo = new Date();
+  threeMonthsAgo.setMonth(threeMonthsAgo.getMonth() - 3);
+  const visitDate = threeMonthsAgo.toLocaleDateString("en-US", {
+    year: "numeric",
+    month: "numeric",
+    day: "numeric",
+  });
+
   const scenario = {
     title: "Hypertension Management",
     patientInfo: `
@@ -12,10 +21,7 @@ export default async function HTNScenarioPage() {
 | **Gender** | F |
 
 * **Allergies:** NKDA (No Known Drug Allergies)
-* **Allergies:** NKDA (No Known Drug Allergies)
 
-### Chief Complaint (CC)
-Alice Johnson is a 58-year-old patient referred to ambulatory care pharmacy service by her PCP Dr. Martinez for blood pressure management.
 ### Chief Complaint (CC)
 Alice Johnson is a 58-year-old patient referred to ambulatory care pharmacy service by her PCP Dr. Martinez for blood pressure management.
 
@@ -24,12 +30,8 @@ Alice Johnson is a 58-year-old patient referred to ambulatory care pharmacy serv
 
 ### Family History
 * Father: CVA at age 45
-* Father: CVA at age 45
 
 ### Social History
-* **Occupation:** Assistant Manager at Bath & Body Works
-* **Insurance:** Blue Cross Blue Shield PPO plan
-* **Support:** Lives alone, has family support
 * **Occupation:** Assistant Manager at Bath & Body Works
 * **Insurance:** Blue Cross Blue Shield PPO plan
 * **Support:** Lives alone, has family support
@@ -39,7 +41,7 @@ Alice Johnson is a 58-year-old patient referred to ambulatory care pharmacy serv
 * Losartan 50 mg by mouth once daily
 
 ### Physical Exam (PE)
-**Vitals (11/8/2023):**
+**Vitals (${visitDate}):**
 | Parameter | Value |
 |----------|--------|
 | BP | 146/88 |
@@ -49,7 +51,7 @@ Alice Johnson is a 58-year-old patient referred to ambulatory care pharmacy serv
 | Ht | 5' 10" |
 | Wt | 78.2 kg |
 
-**ROS (11/8/2023):**
+**ROS (${visitDate}):**
 * **Constitutional:** Generally well-appearing
 * **CV:** RRR (Regular Rate and Rhythm)
 * **Neck:** No JVD (Jugular Venous Distention)
@@ -57,7 +59,7 @@ Alice Johnson is a 58-year-old patient referred to ambulatory care pharmacy serv
 * **Extremities:** Warm to touch, no edema
 
 ### Labs
-**Basic Metabolic Panel (From 11/8/2023):**
+**Basic Metabolic Panel (From ${visitDate}):**
 | Test | Result |
 |------|---------|
 | Sodium | 138 mEq/L |
@@ -104,10 +106,12 @@ Alice Johnson is a 58-year-old patient referred to ambulatory care pharmacy serv
 <lifestyle_changes>
 - You recently started cooking more Mediterranean meals on weekends.
 - You changed work lunches to include more salads and grilled chicken.
+- you cook together with your sister on Sundays sometimes.
 - You still struggle with late-night fast food (2-3 times/week) during late shifts.
 - You started a walking routine during lunch breaks.
 - You joined a weekend gardening club last month.
 - You are active in a local book club.
+- was a previous smoker but quit 10 years ago.
 </lifestyle_changes>
 
 <personality_traits>
